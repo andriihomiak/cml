@@ -4,12 +4,18 @@ FROM dvcorg/${DOCKER_FROM}:latest as base
 
 LABEL maintainer="dvc.org"
 
+ARG PYTHON_VERSION=3.7
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
-        python3 \
+        python${PYTHON_VERSION} \
         python3-pip \
         python3-setuptools && \
     pip3 install --upgrade pip && \
     update-alternatives --install \
-    /usr/bin/python python $(which python3) 10 && \
+    /usr/bin/python python $(which python${PYTHON_VERSION}) 10 && \
+    update-alternatives --install \
+    /usr/bin/python3 python3 $(which python${PYTHON_VERSION}) 10 && \
+    update-alternatives --install \
+    /usr/bin/pip pip $(which pip3) 10 && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
